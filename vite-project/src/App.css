@@ -1,0 +1,87 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+#todos{
+  
+  align-self: flex-start;
+
+}
+
+#checkers {
+  align-items: center;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+h1{
+  margin: 15px;
+  color: lightskyblue;
+  font-size: xx-large;
+  padding-bottom: 25px;
+}
+
+.hauptListe li{               /* Liste für die offenen To do s */
+display: flex;
+justify-content: space-between;
+max-width: 300px;
+color: aquamarine;
+
+}
+
+.fertigeListe li{            /* Liste für die To Dos die schon erledigt sind  */
+  display: flex;
+justify-content: space-between;
+max-width: 300px;
+color: lightcoral;
+}
+
+h2{                 /* Überschrift für die To Dos die noch zu erledigen sind*/
+  display: flex;
+ 
+}
+
+.offene{
+  color:green;
+}
+
+.geschlossen {
+  color: red; 
+}
+
+.eingabeFeld {              /* Eingabefeld für die to Do s */
+  display: flex;
+  justify-content: center;
+  size: 200px;
+  height: 30px;
+  padding-bottom: 50px;
+}
+
+.eingabe{
+display: flex;
+width: 400px;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
