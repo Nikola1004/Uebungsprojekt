@@ -5,6 +5,8 @@ import {CheckOutlined}                                                          
 from '@ant-design/icons';
 import {DeleteOutlined}                                                                    //Button für wieder löschen implementieren
 from '@ant-design/icons';
+import {Divider, List, Button, Input, Space, Typography} from 'antd';
+const {Title} = Typography;
 
 import './App.css'
 
@@ -12,6 +14,10 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [items, setItems] = useState([]);
   const [archivedItems, setArchivedItems] = useState([]);
+
+  const { Search } = Input;
+  
+  
 
   useEffect(() => {                       
     const savedItems = JSON.parse(localStorage.getItem('items')) || [];        
@@ -24,14 +30,15 @@ function App() {
     setInputValue(e.target.value);                                                          //e.target.value ist der Wert des Eingabefeldes und wird gesetzt
   };
 
-  const handleSubmit = (e) => {                                                             //Funktion die beim abschicken des Formulars abgerufen wird
-    e.preventDefault();                                                                     //Verhindert Standartverhalten / also neuladen der Seite
-    if (inputValue.trim()) {                                                                // das .trim entfernt Leerzeichen am Anfang 
-      const newItems = [...items, inputValue];                                              //Array was die Elemente enthält
-      setItems(newItems);                                                                   //aktualisiert den State mit dem neuen Array
-      setInputValue('');                                                                    //Setzt eingabefeld zurück 
+  const handleSubmit = (value) => {                                                             //Funktion die beim abschicken des Formulars abgerufen wird
+    // e.preventDefault();                                                                     //Verhindert Standartverhalten / also neuladen der Seite
+    if (value.trim()) {                                                                // das .trim entfernt Leerzeichen am Anfang 
+      const newItems = [...items, value];                                              //Array was die Elemente enthält
+      setItems(newItems);       
+      console.log(items);                                                         //Setzt eingabefeld zurück 
       localStorage.setItem('items', JSON.stringify(newItems));                              //speichert die Erste Liste( offene To Do's) im local Storage
     }
+    setInputValue('');
   };
 
   const handleArchive = (index) => {                                                    //nimmt den Index des weiterleitenden Element
@@ -51,39 +58,34 @@ function App() {
   };  
 
   return (
-    <div className="App">
-      <h1> Meine ToDo- Liste</h1>
-      <form onSubmit={handleSubmit}>                                                   {/* Funktion für den submit button vergeben  */} 
-        <div className="eingabeFeld">
-        <input 
-          className="eingabe"
-          type="text" 
-          value={inputValue} 
-          onChange={handleChange} 
-          placeholder="Gib etwas ein" 
-        />
-        <button type="submit"><PlusSquareOutlined/></button>                          {/* der submit Button ein To Do zu erstellen   */ }
-        </div>
-      </form>
-      <h2 className="offene" >offene To Do's</h2>
-      <ul className ="hauptListe" >
-        {items.map((item, index) => (                                                 /* Ein Array wir erstellt durch map-Methode, macht für jedes Element ein <li> */ 
-          <li ckey={index}>                                                           {/* das Elemten von dem gespeicherten Array oben. mit dem Index */} 
-            {item}                                                                    {/* Hier wird das Element das ausgegeben */}
-            <button onClick={() => handleArchive(index)}><CheckOutlined/></button>    {/* Buttom um die offenen To Do's zu schließen */}
-          </li>
-        ))}
-      </ul>
-      <h2 className="geschlossen">Absgeschlossene To Do's</h2>
-      <ul className="fertigeListe">
-        {archivedItems.map((item, index) => (                                        /* neues Array wird erstellt mit den weitergeleiteten Elemente und in <li> weitergegeben  */
-          <li key={index}>                                                           {/* Das Element im Array an der Stelle des Index  */}
-            {item}                                                                   {/* Element */}
-            <button onClick={() => handleDeleteArchived(index)}><DeleteOutlined/></button>    {/* Button um die erledigten To Do's zu löschen*/}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Title  >Meine ToDo-Liste</Title>
+      <Search placeholder="input search text" onSearch={handleSubmit} enterButton={<PlusSquareOutlined/>} allowClear value={inputValue} onChange={handleChange}/>
+      <Title level={2} type="success">offene ToDo's</Title>
+
+      <List
+        size="large"
+        bordered
+        dataSource={items}
+        renderItem={(items,index) => <List.Item 
+            actions={[ <Button type="primary" key="checker" shape="circle" icon={<CheckOutlined />} onClick={() => handleArchive(index)}/>]}
+            >{items}</List.Item>}
+      />
+      
+      
+      
+      <Title level={2} type="danger">abgeschlossene ToDo's</Title>
+      <List
+        size="large"
+        
+        bordered
+        dataSource={archivedItems}
+        renderItem={(items,index) => <List.Item 
+            actions={[ <Button type="primary" key="checker" shape="circle" icon={<DeleteOutlined />} onClick={() => handleDeleteArchived(index)}/>]}
+            >{items}</List.Item>}
+      />
+
+    </>
   );
 }
 
